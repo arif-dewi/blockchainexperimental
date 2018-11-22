@@ -18,7 +18,6 @@ class Block {
     this.previousHash = previousHash;
     this.hash = this.calculateHash();
   }
-
   /**
    * Calculate hash
    * @returns {*}

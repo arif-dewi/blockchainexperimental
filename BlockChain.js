@@ -1,5 +1,4 @@
 const Block = require('./Block');
-
 /**
  * BlockChain
  */
@@ -8,7 +7,6 @@ class BlockChain {
     // TODO: Rewrite using hash-table
     this.chain = [BlockChain.createGenesisBlock()];
   }
-
   /**
    * Create the very first genesis block
    * @returns {Block}
@@ -16,7 +14,6 @@ class BlockChain {
   static createGenesisBlock() {
     return new Block({index: 0, timestamp: "01/01/2018", data: "Genesis Block", previousHash: "0"})
   }
-
   /**
    * Get the latest block
    * @returns {Block} latest block
@@ -24,7 +21,6 @@ class BlockChain {
   getLatestBlock() {
     return this.chain[this.chain.length - 1];
   }
-
   /**
    * Add new block to the chain
    * @param {Block} newBlock
@@ -37,7 +33,6 @@ class BlockChain {
     // Some checks are here in the real world
     this.chain.push(newBlock);
   }
-
   /**
    * Check is chain valid
    */

@@ -1,12 +1,12 @@
 {
   "name": "blockchain",
   "version": "1.0.0",
-  "description": "",
+  "description": "Experimental implementation of the BlockChain using Javascript",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/nyc node_modules/.bin/ava --verbose"
   },
-  "author": "",
+  "author": "Andrei Donskikh",
   "license": "ISC",
   "dependencies": {
     "crypto-js": "^3.1.9-1"

@@ -1,4 +1,4 @@
 # BlockChainExperimental
 ![BuildBadge](https://img.shields.io/bitbucket/pipelines/donskikh/blockchainexperimental.svg)
 
-Experimental implementation of the Blockchain using Javascript
+Experimental implementation of the BlockChain using Javascript
