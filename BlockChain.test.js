@@ -27,3 +27,14 @@ test('addBlock() sholud not add anything except Block instances', t => {
 test('getLatestBlock() should return the latest block', t => {
   t.is(TestBlockChain.getLatestBlock().index, 1);
 });
+
+test('isChainValid() should return true if this is the case', t => {
+  t.true(TestBlockChain.isChainValid());
+});
+
+test('isChainValid() should return false if chain has been hacked', t => {
+  TestBlockChain.chain[1].data = { amount: 100};
+  TestBlockChain.chain[1].calculateHash();
+
+  t.false(TestBlockChain.isChainValid());
+});

@@ -37,6 +37,22 @@ class BlockChain {
     // Some checks are here in the real world
     this.chain.push(newBlock);
   }
+
+  /**
+   * Check is chain valid
+   */
+  isChainValid() {
+    const chainLength = this.chain.length;
+    // Check from 1 because the 1st one is Generic
+    for (let i = 1; i < chainLength; i++) {
+      const currentBlock = this.chain[i];
+      const prevBlock = this.chain[i - 1];
+
+      if (currentBlock.hash !== currentBlock.calculateHash()) return false;
+      else if (currentBlock.previousHash !== prevBlock.hash) return false;
+    }
+    return true;
+  }
 }
 
 module.exports = BlockChain;
