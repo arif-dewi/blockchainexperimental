@@ -4,6 +4,18 @@ import test from 'ava';
 
 const TestBlockChain = new BlockChain();
 
+const getBlockToRestore = index => {
+  const blockToRestore = TestBlockChain.chain[index];
+  const newBlockToRestore = new Block({
+    index: blockToRestore.index,
+    timestamp: blockToRestore.timestamp,
+    previousHash: blockToRestore.previousHash,
+    data: blockToRestore.data
+  });
+
+  return newBlockToRestore;
+};
+
 test('constructor should create Genesis block', t => {
   t.is(TestBlockChain.chain[0].data, 'Genesis Block');
 });
@@ -33,8 +45,25 @@ test('isChainValid() should return true if this is the case', t => {
 });
 
 test('isChainValid() should return false if chain has been hacked', t => {
-  TestBlockChain.chain[1].data = { amount: 100};
-  TestBlockChain.chain[1].calculateHash();
+  const index = 1;
+  const blockToRestore = getBlockToRestore(index);
+
+  TestBlockChain.chain[index].data = { amount: 100};
+  TestBlockChain.chain[index].calculateHash();
 
   t.false(TestBlockChain.isChainValid());
+
+  TestBlockChain.chain[index] = blockToRestore;
+});
+
+test('isChainValid() should return false if hash has been hacked', t => {
+  const index = 0;
+  const blockToRestore = getBlockToRestore(index);
+
+  TestBlockChain.chain[0].hash = '123';
+  const result = TestBlockChain.isChainValid();
+
+  t.false(result);
+
+  TestBlockChain.chain[index] = blockToRestore;
 });

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ava --verbose"
+    "test": "node_modules/.bin/nyc node_modules/.bin/ava --verbose"
   },
   "author": "",
   "license": "ISC",
