@@ -21,7 +21,9 @@ test('constructor should create Genesis block', t => {
 });
 
 test('createGenesisBlock() should return Genesis block', t => {
-  t.is(BlockChain.createGenesisBlock().data, 'Genesis Block');
+  t.is(TestBlockChain.createGenesisBlock().data, 'Genesis Block');
+  // Clear up test chain
+  TestBlockChain.chain.shift();
 });
 
 test('addBlock() should add new block to the chain', t => {

@@ -12,6 +12,20 @@ test('constructor()', t => {
 
 test('calculateHash()', t => {
   const hash = testBlock.calculateHash();
-  const expectedHash = '64e8966a97ecdfc95914e0e8e74b4fc6eb7be4d14227c1556ad2ce8f6833325c44aae9c8455fe0a73cfbaa4141fff29bd331504747046a0930c77c2df5a7c3c1';
+  const expectedHash = '077bd1c377348d93c7a227df255746575f7869f1545770e67bf993d0299f4a58d4ab025553d2238e86483588614c7fa8fb1d9be374710e71026ab1b095049a49';
   t.is(hash, expectedHash);
+});
+
+test('mine() should create a hash with the specified amount of zeros at the beginning', t => {
+  const DIFFICULTY = 2;
+  const hash = testBlock.mine(DIFFICULTY);
+
+  t.is(hash.substring(0, DIFFICULTY), new Array(DIFFICULTY + 1).join('0'));
+});
+
+test('mine() should work correctly without specifying a "difficulty"', t => {
+  const DIFFICULTY = 2;
+  const hash = testBlock.mine();
+
+  t.is(hash.substring(0, DIFFICULTY), new Array(DIFFICULTY + 1).join('0'));
 });
