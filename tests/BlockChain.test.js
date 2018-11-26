@@ -1,5 +1,5 @@
-import BlockChain from './BlockChain';
-import Block from './Block';
+import BlockChain from '../src/BlockChain';
+import Block from '../src/Block';
 import test from 'ava';
 
 const TestBlockChain = new BlockChain();
@@ -27,10 +27,10 @@ test('createGenesisBlock() should return Genesis block', t => {
 });
 
 test('addBlock() should add new block to the chain', t => {
-  const newBlock = new Block({index: 1, timestamp: "01/10/2018", data: { amount: 4} });
+  const newBlock = new Block({timestamp: "01/10/2018", data: { amount: 4} });
   TestBlockChain.addBlock(newBlock);
 
-  t.is(TestBlockChain.chain[1].index, 1);
+  t.is(TestBlockChain.chain[1].timestamp, newBlock.timestamp);
 });
 
 test('addBlock() sholud not add anything except Block instances', t => {
@@ -39,7 +39,7 @@ test('addBlock() sholud not add anything except Block instances', t => {
 });
 
 test('getLatestBlock() should return the latest block', t => {
-  t.is(TestBlockChain.getLatestBlock().index, 1);
+  t.is(TestBlockChain.getLatestBlock().timestamp, "01/10/2018");
 });
 
 test('isChainValid() should return true if this is the case', t => {

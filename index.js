@@ -1,10 +1,21 @@
-const Block = require('./Block');
-const BlockChain = require('./BlockChain');
-const DIFFICULY = 4;
+const Block = require('./src/Block');
+const BlockChain = require('./src/BlockChain');
+const Transaction = require('./src/Transaction');
+const MY_ADDRESS = 'andrei-address';
 
-const JsCoinChain = new BlockChain(DIFFICULY);
+const JsCoinChain = new BlockChain();
 
-JsCoinChain.addBlock(new Block({index: 1, timestamp: "01/10/2018", data: { amount: 4} }));
-JsCoinChain.addBlock(new Block({index: 2, timestamp: "02/16/2018", data: { amount: 10} }));
+JsCoinChain.createTransaction(new Transaction({ amount: 100, fromAddress: 'address1', toAddress: 'address2'}));
+JsCoinChain.createTransaction(new Transaction({ amount: 50, fromAddress: 'address2', toAddress: 'address1'}));
 
+console.log('\nStarting the miner...');
+JsCoinChain.minePendingTransactions(MY_ADDRESS);
+console.log('\nBalance of Andrei is:', JsCoinChain.getBalanceOfAddress(MY_ADDRESS));
+console.dir(JsCoinChain);
+
+console.log('.'.repeat(23));
+
+console.log('\nStart the miner again...');
+JsCoinChain.minePendingTransactions(MY_ADDRESS);
+console.log('\nBalance of Andrei is:', JsCoinChain.getBalanceOfAddress(MY_ADDRESS));
 console.dir(JsCoinChain);

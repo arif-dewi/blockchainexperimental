@@ -4,6 +4,7 @@
   "description": "Experimental implementation of the BlockChain using Javascript",
   "main": "index.js",
   "scripts": {
+    "start": "node_modules/.bin/node index.js",
     "test": "node_modules/.bin/nyc node_modules/.bin/ava --verbose"
   },
   "author": "Andrei Donskikh",

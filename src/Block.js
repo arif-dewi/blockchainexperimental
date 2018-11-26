@@ -6,25 +6,25 @@ const DEFAULT_DIFFICULTY = 2;
 class Block {
   /**
    * Constructor
-   * @param {number} [index]
    * @param {string} timestamp data
-   * @param {*} data anything you want to store
+   * @param {Array<Transaction>} transactions
    * @param {string} [previousHash] will be re-calculated automatically
+   * @param {string} [name] of the block
    */
-  constructor({index, timestamp, data, previousHash = ''}) {
-    this.index = index;
+  constructor({timestamp, transactions, previousHash = '', name = ''}) {
     this.timestamp = timestamp;
-    this.data = data;
+    this.transactions = transactions;
     this.previousHash = previousHash;
     this.hash = this.calculateHash();
     this.nonce = 0;
+    this.name = name;
   }
   /**
    * Calculate hash
    * @returns {*}
    */
   calculateHash() {
-    return SHA3(`${this.index}${this.previousHash}${this.timestamp}${JSON.stringify(this.data)}${this.nonce}`).toString();
+    return SHA3(`${this.previousHash}${this.timestamp}${JSON.stringify(this.transactions)}${this.nonce}`).toString();
   }
   /**
    * Mine the block

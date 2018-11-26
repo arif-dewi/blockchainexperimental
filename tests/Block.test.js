@@ -1,4 +1,4 @@
-import Block from './Block';
+import Block from '../src/Block';
 import test from 'ava';
 
 const testObject = {index: 1, timestamp: "01/10/2018", data: { amount: 4} };
