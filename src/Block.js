@@ -1,3 +1,4 @@
+const Logger = require('./Logger');
 const SHA3 = require("crypto-js/sha3");
 const DEFAULT_DIFFICULTY = 2;
 /**
@@ -36,8 +37,18 @@ class Block {
       this.nonce++;
       this.hash = this.calculateHash();
     }
-    console.log("Block mined:", this.hash);
+    Logger.info(`Block mined: ${this.hash}`);
     return this.hash;
+  }
+  /**
+   * Check whether the block has only valid transactions
+   * @returns {boolean}
+   */
+  hasValidTransactions() {
+    for (const transaction of this.transactions) {
+      if (!transaction.isValid()) return false;
+    }
+    return true;
   }
 }
 

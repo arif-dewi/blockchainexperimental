@@ -1,7 +1,8 @@
+const Logger = require('./Logger');
 const Block = require('./Block');
 const Transaction = require('./Transaction');
 const DEFAULT_DIFFICULTY = 2;
-const MINING_REWARD = 100;
+const MINING_REWARD = 150;
 
 /**
  * BlockChain
@@ -10,7 +11,9 @@ const MINING_REWARD = 100;
 class BlockChain {
   constructor(difficulty = DEFAULT_DIFFICULTY) {
     // TODO: Rewrite using hash-table
-    this.chain = [this.createGenesisBlock()];
+    const genesisBlock = this.createGenesisBlock();
+    this.chain = {[genesisBlock.hash]: genesisBlock};
+    this.latestBlockHash = genesisBlock.hash;
     this.difficulty = difficulty;
     this.pendingTransactions = [];
     this.miningReward = MINING_REWARD;
@@ -36,7 +39,7 @@ class BlockChain {
    * @returns {Block} latest block
    */
   getLatestBlock() {
-    return this.chain[this.chain.length - 1];
+    return this.chain[this.latestBlockHash];
   }
   /**
    * Mine pending transactions
@@ -50,8 +53,8 @@ class BlockChain {
     });
     block.mine(this.difficulty);
 
-    console.log("Block successfully mined");
-    this.chain.push(block);
+    Logger.info("Block successfully mined");
+    this.chain[block.hash] = block;
 
     this.pendingTransactions = [
       new Transaction({ toAddress: miningRewardAddress, amount: this.miningReward })
@@ -61,7 +64,14 @@ class BlockChain {
    * Create transaction and add it into pending list
    * @param {Transaction} transaction
    */
-  createTransaction(transaction) {
+  addTransaction(transaction) {
+    if (!transaction.fromAddress || !transaction.toAddres) {
+      throw new Error('Transaction must include from and to address');
+
+    } else if (!transaction.isValid()) {
+      throw new Error('Cannot add invalid transaction to the chain');
+    }
+
     this.pendingTransactions.push(transaction);
   }
   /**
@@ -72,8 +82,8 @@ class BlockChain {
   getBalanceOfAddress(address) {
     let balance = 0;
 
-    for (const block of this.chain) {
-      for (const transaction of block.transactions) {
+    for (const hash in this.chain) {
+      for (const transaction of this.chain[hash].transactions) {
         if (transaction.fromAddress === address) balance -= transaction.amount;
         if (transaction.toAddres === address) balance += transaction.amount;
       }
@@ -85,14 +95,16 @@ class BlockChain {
    * Check is chain valid
    */
   isChainValid() {
-    const chainLength = this.chain.length;
     // Check from 1 because the 1st one is Generic
-    for (let i = 1; i < chainLength; i++) {
-      const currentBlock = this.chain[i];
-      const prevBlock = this.chain[i - 1];
+    for (let hash in this.chain) {
+      const currentBlock = this.chain[hash];
+      const prevBlock = this.chain[currentBlock.previousHash];
 
-      if (currentBlock.hash !== currentBlock.calculateHash()) return false;
-      else if (currentBlock.previousHash !== prevBlock.hash) return false;
+      if (prevBlock) {
+        if (!currentBlock.hasValidTransactions()) return false;
+        else if (currentBlock.hash !== currentBlock.calculateHash()) return false;
+        else if (currentBlock.previousHash !== prevBlock.calculateHash()) return false;
+      }
     }
     return true;
   }

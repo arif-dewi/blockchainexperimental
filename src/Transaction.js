@@ -42,7 +42,7 @@ class Transaction {
    * Check whether the sing off succeed
    */
   isValid() {
-    if (this.fromAddress === null) return true;
+    if (this.fromAddress == null) return true;
     if (!this.signature || this.signature.length === 0) {
       throw new Error('No signature in this transaction!');
     }
@@ -50,7 +50,6 @@ class Transaction {
     const publicKey = ec.keyFromPublic(this.fromAddress, EC_ENCODING);
     return publicKey.verify(this.calculateHash(), this.signature);
   }
-
 }
 
 module.exports = Transaction;
