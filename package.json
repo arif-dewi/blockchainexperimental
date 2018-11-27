@@ -22,6 +22,7 @@
   "devDependencies": {
     "ava": "1.0.0-rc.2",
     "husky": "^1.2.0",
+    "lodash": "^4.17.11",
     "nyc": "^13.1.0"
   }
 }

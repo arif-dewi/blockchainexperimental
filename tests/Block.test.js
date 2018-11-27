@@ -1,7 +1,21 @@
 import Block from '../src/Block';
 import test from 'ava';
+const Transaction = require('../src/Transaction');
+const EC = require('elliptic').ec;
+const ec = new EC('secp256k1');
+const EC_ENCODING = 'hex';
 
-const testObject = {index: 1, timestamp: "01/10/2018", data: { amount: 4} };
+const MY_KEY = ec.keyFromPrivate('22889c8652ae89aecd890cda663a977bb6f1ef5e96d9e1474ffc894e116aa256');
+const MY_WALLET_ADDRESS = MY_KEY.getPublic(EC_ENCODING);
+
+const transaction1 = new Transaction({
+  fromAddress: MY_WALLET_ADDRESS,
+  toAddress: 'address1',
+  amount: 100
+});
+transaction1.signTransaction(MY_KEY);
+
+const testObject = {timestamp: '12345', transactions: [transaction1]};
 const testBlock = new Block(testObject);
 
 test('constructor()', t => {
@@ -12,7 +26,7 @@ test('constructor()', t => {
 
 test('calculateHash()', t => {
   const hash = testBlock.calculateHash();
-  const expectedHash = '077bd1c377348d93c7a227df255746575f7869f1545770e67bf993d0299f4a58d4ab025553d2238e86483588614c7fa8fb1d9be374710e71026ab1b095049a49';
+  const expectedHash = 'd1675f111ba8ff69819c0e5f88a301b19cb65a426e1d5fc605844f22d664d828d4ba254aea168105a7ad1d82cacc29ddc0a7f2f83195dd9bb9e7dab3a65e62ab';
   t.is(hash, expectedHash);
 });
 
@@ -29,3 +43,8 @@ test('mine() should work correctly without specifying a "difficulty"', t => {
 
   t.is(hash.substring(0, DIFFICULTY), new Array(DIFFICULTY + 1).join('0'));
 });
+
+test('hasValidTransactions() should return true if all transactions are valid', t => {
+  t.true(testBlock.hasValidTransactions());
+});
+

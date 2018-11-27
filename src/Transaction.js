@@ -12,9 +12,8 @@ class Transaction {
    * @param amount
    */
   constructor({fromAddress, toAddress, amount}) {
-    // TODO: tests
     this.fromAddress = fromAddress;
-    this.toAddres = toAddress;
+    this.toAddress = toAddress;
     this.amount = amount;
     this.signature = null;
   }
@@ -23,14 +22,17 @@ class Transaction {
    * @returns {*}
    */
   calculateHash() {
-    return SHA3(`${this.fromAddress}${this.toAddres}${this.amount}`).toString();
+    return SHA3(`${this.fromAddress}${this.toAddress}${this.amount}`).toString();
   }
   /**
    * Sign transaction
    * @param key
    */
   signTransaction(key) {
-    if (key.getPublic(EC_ENCODING) !== this.fromAddress) {
+    if (!key || typeof key.getPublic !== 'function') {
+      throw new Error('Key should be specified!');
+    }
+    else if (key.getPublic(EC_ENCODING) !== this.fromAddress) {
       throw new Error("You can't sign transactions for other wallets!");
     }
 

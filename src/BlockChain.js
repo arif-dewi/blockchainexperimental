@@ -10,7 +10,6 @@ const MINING_REWARD = 150;
  */
 class BlockChain {
   constructor(difficulty = DEFAULT_DIFFICULTY) {
-    // TODO: Rewrite using hash-table
     const genesisBlock = this.createGenesisBlock();
     this.chain = {[genesisBlock.hash]: genesisBlock};
     this.latestBlockHash = genesisBlock.hash;
@@ -55,6 +54,7 @@ class BlockChain {
 
     Logger.info("Block successfully mined");
     this.chain[block.hash] = block;
+    this.latestBlockHash = block.hash;
 
     this.pendingTransactions = [
       new Transaction({ toAddress: miningRewardAddress, amount: this.miningReward })
@@ -65,7 +65,7 @@ class BlockChain {
    * @param {Transaction} transaction
    */
   addTransaction(transaction) {
-    if (!transaction.fromAddress || !transaction.toAddres) {
+    if (!transaction || !transaction.fromAddress || !transaction.toAddress) {
       throw new Error('Transaction must include from and to address');
 
     } else if (!transaction.isValid()) {
@@ -80,12 +80,14 @@ class BlockChain {
    * @returns {number}
    */
   getBalanceOfAddress(address) {
+    if (!address) throw new Error('Specify the address to check!');
+
     let balance = 0;
 
     for (const hash in this.chain) {
       for (const transaction of this.chain[hash].transactions) {
         if (transaction.fromAddress === address) balance -= transaction.amount;
-        if (transaction.toAddres === address) balance += transaction.amount;
+        if (transaction.toAddress === address) balance += transaction.amount;
       }
     }
 
