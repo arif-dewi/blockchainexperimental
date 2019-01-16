@@ -7,11 +7,11 @@ const EC_ENCODING = 'hex';
 class Transaction {
   /**
    * Constructor
-   * @param fromAddress
-   * @param toAddress
-   * @param amount
+   * @param {string} toAddress
+   * @param {number} amount
+   * @param {string} [fromAddress]
    */
-  constructor({fromAddress, toAddress, amount}) {
+  constructor({toAddress, amount, fromAddress}) {
     this.fromAddress = fromAddress;
     this.toAddress = toAddress;
     this.amount = amount;
@@ -19,14 +19,14 @@ class Transaction {
   }
   /**
    * Calculate hash
-   * @returns {*}
+   * @returns {string}
    */
   calculateHash() {
     return SHA3(`${this.fromAddress}${this.toAddress}${this.amount}`).toString();
   }
   /**
    * Sign transaction
-   * @param key
+   * @param {KeyPair} key
    */
   signTransaction(key) {
     if (!key || typeof key.getPublic !== 'function') {

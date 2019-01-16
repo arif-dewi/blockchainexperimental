@@ -20,16 +20,17 @@ class Block {
     this.nonce = 0;
     this.name = name;
   }
+
   /**
    * Calculate hash
-   * @returns {*}
+   * @returns {string}
    */
   calculateHash() {
     return SHA3(`${this.previousHash}${this.timestamp}${JSON.stringify(this.transactions)}${this.nonce}`).toString();
   }
   /**
    * Mine the block
-   * @param [difficulty]
+   * @param {number} [difficulty]
    */
   mine(difficulty = DEFAULT_DIFFICULTY) {
     // Iterate until has has a required  amount of zeros in the beginning

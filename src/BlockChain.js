@@ -6,7 +6,7 @@ const MINING_REWARD = 150;
 
 /**
  * BlockChain
- * @param difficulty of the mining algorithm (how much zeros in the beginning should be)
+ * @param {number} difficulty of the mining algorithm (how much zeros in the beginning should be)
  */
 class BlockChain {
   constructor(difficulty = DEFAULT_DIFFICULTY) {
@@ -42,7 +42,7 @@ class BlockChain {
   }
   /**
    * Mine pending transactions
-   * @param miningRewardAddress Address to send reward
+   * @param {string} miningRewardAddress Address to send reward
    */
   minePendingTransactions(miningRewardAddress) {
     const block = new Block({
@@ -76,7 +76,7 @@ class BlockChain {
   }
   /**
    * Get balance of the given address
-   * @param address
+   * @param {string} address
    * @returns {number}
    */
   getBalanceOfAddress(address) {
